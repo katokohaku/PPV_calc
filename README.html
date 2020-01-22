@@ -370,6 +370,10 @@ summary {
 <pre class="r"><code>require(tidyverse)
 require(magrittr)
 require(ggplot2)</code></pre>
+<p>PPV = n_TP / (n_TP + n_FP)<br />
+= (sensitivity * n_POS) / {(sensitivity * n_POS) + (1 - specifisity) * n_NEG}<br />
+= (sensitivity * prevalence * pop_size) / {(sensitivity * prevalence * pop_size) + (1 - specifisity) * (1 - prevalence) * pop_size}<br />
+= (sensitivity * prevalence) / {(sensitivity * prevalence) + (1 - specifisity) * (1 - prevalence)}</p>
 <pre class="r"><code>getPPV &lt;- function(sensitivity = 0.9, specifisity = 0.9, prevalence = 0.1, pop_size = 100000) {
   n_POS &lt;-      prevalence  * pop_size
   n_NEG &lt;- (1 - prevalence) * pop_size

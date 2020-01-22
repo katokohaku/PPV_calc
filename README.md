@@ -30,6 +30,11 @@ require(magrittr)
 require(ggplot2)
 ```
 
+PPV = n_TP / (n_TP + n_FP)   
+    = (sensitivity * n_POS) / {(sensitivity * n_POS) + (1 - specifisity) * n_NEG}  
+    = (sensitivity * prevalence * pop_size) / {(sensitivity * prevalence * pop_size) + (1 - specifisity) * (1 - prevalence) * pop_size}    
+    = (sensitivity * prevalence) / {(sensitivity * prevalence) + (1 - specifisity) * (1 - prevalence)}    
+
 
 ```r
 getPPV <- function(sensitivity = 0.9, specifisity = 0.9, prevalence = 0.1, pop_size = 100000) {
