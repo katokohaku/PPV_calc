@@ -60,9 +60,10 @@ getPPV(sensitivity = .99, specifisity = .99, prevalence = 1 /100)
 ```
 
 
+
 ```r
 drawPPV <- function(performance = list(c(sensitivity = 0.9, specifisity = 0.9)),
-                    prevalences = c("1/5", "1/10", "1/50", "1/200", "1/1000", "1/2000", "1/10000")) {
+                    prevalences = c("1/5", "1/10", "1/50", "1/200", "1/1000", "1/2000")) {
   ppvs <- data.frame(NULL)
 
   for(i in 1:length(performance)) {
@@ -94,12 +95,12 @@ drawPPV <- function(performance = list(c(sensitivity = 0.9, specifisity = 0.9)),
 ```r
 res <- drawPPV()
 str(res)
-## 'data.frame':	7 obs. of  5 variables:
-##  $ sensitivity : num  0.9 0.9 0.9 0.9 0.9 0.9 0.9
-##  $ specifisity : num  0.9 0.9 0.9 0.9 0.9 0.9 0.9
-##  $ prevalence  : Factor w/ 7 levels "1/5","1/10","1/50",..: 1 2 3 4 5 6 7
+## 'data.frame':	6 obs. of  5 variables:
+##  $ sensitivity : num  0.9 0.9 0.9 0.9 0.9 0.9
+##  $ specifisity : num  0.9 0.9 0.9 0.9 0.9 0.9
+##  $ prevalence  : Factor w/ 6 levels "1/5","1/10","1/50",..: 1 2 3 4 5 6
 ##  $ PPV         : num  0.69231 0.5 0.15517 0.04327 0.00893 ...
-##  $ Sens_vs_Spec: Factor w/ 1 level "0.900 : 0.900": 1 1 1 1 1 1 1
+##  $ Sens_vs_Spec: Factor w/ 1 level "0.900 : 0.900": 1 1 1 1 1 1
 ```
 
 
@@ -108,20 +109,22 @@ pc <- list(
   c(sensitivity = 0.8, specifisity = 0.8),
   c(sensitivity = 0.9, specifisity = 0.9),
   c(sensitivity = 0.99, specifisity = 0.9),
+  c(sensitivity = 0.9,  specifisity = 0.99),
   c(sensitivity = 0.99, specifisity = 0.99),
   c(sensitivity = 0.999, specifisity = 0.999)
 )
 dp <- drawPPV(performance = pc)
 str(dp)
-## 'data.frame':	35 obs. of  5 variables:
-##  $ sensitivity : num  0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.9 0.9 0.9 ...
-##  $ specifisity : num  0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.9 0.9 0.9 ...
-##  $ prevalence  : Factor w/ 7 levels "1/5","1/10","1/50",..: 1 2 3 4 5 6 7 1 2 3 ...
+## 'data.frame':	36 obs. of  5 variables:
+##  $ sensitivity : num  0.8 0.8 0.8 0.8 0.8 0.8 0.9 0.9 0.9 0.9 ...
+##  $ specifisity : num  0.8 0.8 0.8 0.8 0.8 0.8 0.9 0.9 0.9 0.9 ...
+##  $ prevalence  : Factor w/ 6 levels "1/5","1/10","1/50",..: 1 2 3 4 5 6 1 2 3 4 ...
 ##  $ PPV         : num  0.5 0.30769 0.07547 0.0197 0.00399 ...
-##  $ Sens_vs_Spec: Factor w/ 5 levels "0.800 : 0.800",..: 1 1 1 1 1 1 1 2 2 2 ...
+##  $ Sens_vs_Spec: Factor w/ 6 levels "0.800 : 0.800",..: 1 1 1 1 1 1 2 2 2 2 ...
 gg <- ggplot(dp, aes(x = prevalence, y = PPV, colour = Sens_vs_Spec, group = Sens_vs_Spec)) +
   geom_line() +
-  geom_point() +
+  geom_point()+ 
+  scale_color_brewer(palette = "Set1") +
   labs(title = "PPV with given sensitivity and specificity under different prevalense",
        color = "Sensitivity : Specificity") +
   theme_classic()
@@ -132,4 +135,6 @@ export::graph2png(gg, file = "compare.png")
 
 ![](./compare.png)
 
+In the United States, the Rare Diseases Act of 2002 defines rare disease strictly according to prevalence, specifically "any disease or condition that affects fewer than 200,000 people in the United States", or about 1 in 1,500 people. This definition is essentially the same as that of the Orphan Drug Act of 1983, a federal law that was written to encourage research into rare diseases and possible cures.
 
+In Japan, the legal definition of a rare disease is one that affects fewer than 50,000 patients in Japan, or about 1 in 2,500 people. [(Wikipedia)](https://en.wikipedia.org/wiki/Rare_disease#Definition)

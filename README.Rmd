@@ -69,9 +69,10 @@ getPPV(sensitivity = .99, specifisity = .99, prevalence = 1 /100)
 
 ```
 
+
 ```{r}
 drawPPV <- function(performance = list(c(sensitivity = 0.9, specifisity = 0.9)),
-                    prevalences = c("1/5", "1/10", "1/50", "1/200", "1/1000", "1/2000", "1/10000")) {
+                    prevalences = c("1/5", "1/10", "1/50", "1/200", "1/1000", "1/2000")) {
   ppvs <- data.frame(NULL)
 
   for(i in 1:length(performance)) {
@@ -111,6 +112,7 @@ pc <- list(
   c(sensitivity = 0.8, specifisity = 0.8),
   c(sensitivity = 0.9, specifisity = 0.9),
   c(sensitivity = 0.99, specifisity = 0.9),
+  c(sensitivity = 0.9,  specifisity = 0.99),
   c(sensitivity = 0.99, specifisity = 0.99),
   c(sensitivity = 0.999, specifisity = 0.999)
 )
@@ -118,7 +120,8 @@ dp <- drawPPV(performance = pc)
 str(dp)
 gg <- ggplot(dp, aes(x = prevalence, y = PPV, colour = Sens_vs_Spec, group = Sens_vs_Spec)) +
   geom_line() +
-  geom_point() +
+  geom_point()+ 
+  scale_color_brewer(palette = "Set1") +
   labs(title = "PPV with given sensitivity and specificity under different prevalense",
        color = "Sensitivity : Specificity") +
   theme_classic()
@@ -128,4 +131,6 @@ export::graph2png(gg, file = "compare.png")
 
 ![](./compare.png)
 
+In the United States, the Rare Diseases Act of 2002 defines rare disease strictly according to prevalence, specifically "any disease or condition that affects fewer than 200,000 people in the United States", or about 1 in 1,500 people. This definition is essentially the same as that of the Orphan Drug Act of 1983, a federal law that was written to encourage research into rare diseases and possible cures.
 
+In Japan, the legal definition of a rare disease is one that affects fewer than 50,000 patients in Japan, or about 1 in 2,500 people. [(Wikipedia)](https://en.wikipedia.org/wiki/Rare_disease#Definition)
