@@ -71,23 +71,22 @@ getPPV(sensitivity = .99, specifisity = .99, prevalence = 1 /100)
 
 ```{r}
 drawPPV <- function(performance = list(c(sensitivity = 0.9, specifisity = 0.9)),
-                    prevalences = c("1/5", "1/10", "1/50", "1/1000", "1/10000", "1/100000")) {
+                    prevalences = c("1/5", "1/10", "1/50", "1/200", "1/1000", "1/2000", "1/10000")) {
   ppvs <- data.frame(NULL)
-  e <- strsplit(prevalences, "/")
-  
+
   for(i in 1:length(performance)) {
     this <- performance[[i]]
-    for (j in 1:length(e)) {
-      p <- as.numeric(e[[j]][1]) / as.numeric(e[[j]][2])
+    for (p in prevalences) {
+      ep <- eval(parse(text = p))
       
       this_ppvs <- data.frame(
         sensitivity = this["sensitivity"], 
         specifisity   = this["specifisity"], 
-        prevalence  = prevalences[j], 
+        prevalence  = p, 
         PPV = getPPV(
           sensitivity = this["sensitivity"],
           specifisity = this["specifisity"],
-          prevalence = as.numeric(p)
+          prevalence = ep
         )
       )
       # print(this_ppvs)  
@@ -116,7 +115,7 @@ pc <- list(
   c(sensitivity = 0.999, specifisity = 0.999)
 )
 dp <- drawPPV(performance = pc)
-
+str(dp)
 gg <- ggplot(dp, aes(x = prevalence, y = PPV, colour = Sens_vs_Spec, group = Sens_vs_Spec)) +
   geom_line() +
   geom_point() +
